@@ -1,6 +1,7 @@
 import React from 'react';
 import { Field } from 'redux-form';
 import styled from "styled-components";
+import { DropdownList } from 'react-widgets';
 
 
 const Root = styled.div`
@@ -15,6 +16,14 @@ const EditButton = styled.button`
   background-color: green;
 `
 
+const CancelButton = styled.button`
+  width: 40px;
+  height: 40px;
+  margin: 0px;
+  color: white;
+  background-color: red;
+`
+
 const Value = styled.p`
   height: 40px;
   font-size: 16px;
@@ -22,17 +31,29 @@ const Value = styled.p`
   border-color: none;
 `
 
+const Input = styled.input`
+  height: 60px;
+  width: 100%;
+  font-size: 30px;
+`
 
 const renderInput = ({input, edit}) => {
   return(
     <div>
     {edit ? 
-      <input {...input}></input>
+      <Input {...input}></Input>
     : <p>{input.value}</p>
     }
     </div>
   )
 }
+
+const renderDropdownList = ({ input, data, valueField, textField }) =>
+  <DropdownList {...input}
+    data={data}
+    valueField={valueField}
+    textField={textField}
+    onChange={input.onChange} />
 
 
 class EditableField extends React.Component{
@@ -70,12 +91,13 @@ class EditableField extends React.Component{
 
 
   render(){
-    let { label, name, placeholder, handleSubmit, value } = this.props
+    let { fieldType, data, label, name, placeholder, handleSubmit, value } = this.props
     let {edit} = this.state
     return(
       <Root>
         <label>{label}</label>
           <div>
+          {fieldType == "input" ? 
             <Field
               name={name}
               component={renderInput}
@@ -83,10 +105,19 @@ class EditableField extends React.Component{
               placeholder={placeholder}
               edit={edit}
             />
+          : null}
+          {fieldType == "dropdown" ?
+            <Field
+              name={name}
+              component={renderDropdownList}
+              type="text"
+              placeholder={placeholder}
+            />
+            : null}
             </div> 
         {edit ?
         <div>
-            <EditButton onClick={this.onCancel}>X</EditButton>
+            <CancelButton onClick={this.onCancel}>X</CancelButton >
             <EditButton onClick={this.onSave}>Save</EditButton>
         </div>
           : 
