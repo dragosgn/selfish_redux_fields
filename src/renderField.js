@@ -91,7 +91,7 @@ class EditableField extends React.Component{
 
 
   render(){
-    let { fieldType, data, label, name, placeholder, handleSubmit, value } = this.props
+    let { fieldType, label, name, placeholder, handleSubmit, value } = this.props
     let {edit} = this.state
     return(
       <Root>
@@ -112,6 +112,7 @@ class EditableField extends React.Component{
               component={renderDropdownList}
               type="text"
               placeholder={placeholder}
+              edit={edit}
             />
             : null}
             </div> 
